@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class KarakterKontrol : MonoBehaviour
 {
-    // Ad Soyad: 
-    // Öğrenci Numarası: 
+    // Ad Soyad: Ali Soylu
+    // Öğrenci Numarası: 232011013
 
 
     // Soru 1: Karakteri yön tuşları ile hareket ettiren kodu, HareketEt fonksiyonu içerisine yazınız.
@@ -22,7 +22,9 @@ public class KarakterKontrol : MonoBehaviour
     public float hiz = 5f;
     public float ziplamaGucu = 5f;
 
+
     public int skor = 0;
+    private int keyCount=0;
 
     void Start()
     {
@@ -32,20 +34,51 @@ public class KarakterKontrol : MonoBehaviour
     void Update()
     {
         // Yazdığınız metodları çağırınız.
+        Zipla();
+        HareketEt();
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Soru 3 ve soru 4 burada çözülecek.
+        if (other.gameObject.CompareTag("Puan")) 
+            {
+            skor++;
+            Destroy(other.gameObject);
+            metin.text = "Score: " + skor;
+            }
+           
+        if (other.gameObject.CompareTag("Engel"))
+
+
+            
+            {
+                Debug.Log("Oyun Bitti");
+                
+
+            }
     }
 
     void Zipla()
     {
         // Space tuşuna basınca karakter zıplamalı ancak aşağıdaki kod hatalı.
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
-            Vector3 ziplamaYonu = new Vector3(UnityEngine.Random.Range(-1f, 1f), 1, UnityEngine.Random.Range(-1f, 1f));
-            karakterRb.AddForce(ziplamaYonu * (ziplamaGucu / 2), ForceMode2D.Impulse);
+            //Vector3 ziplamaYonu = new Vector3(UnityEngine.Random.Range(-1f, 1f), 1, UnityEngine.Random.Range(-1f, 1f));
+            //karakterRb.AddForce(ziplamaYonu * (ziplamaGucu / 2), ForceMode2D.Impulse);
+            karakterRb.AddForce(UnityEngine.Vector3.up * (ziplamaGucu * Time.deltaTime));
+
         }
+    }
+    void HareketEt()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow)) 
+    {
+        karakterRb.AddForce(UnityEngine.Vector3.left * (hiz * Time.deltaTime)); 
+    }
+    else if (Input.GetKey(KeyCode.RightArrow)) 
+    {
+        karakterRb.AddForce(UnityEngine.Vector3.right * (hiz * Time.deltaTime));
+    }
     }
 }
